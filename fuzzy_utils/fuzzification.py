@@ -157,28 +157,3 @@ class Fuzzification():
             fuzzified_membership_df.insert(0, feature,
                                            self._membership_data[index])
         return fuzzified_membership_df
-
-
-def main():
-    dataset = pd.read_csv('train_dataset.csv')
-    fuzzy_sets = {
-        'SCA_AREA': ["BARRIO MUY PEQUEÑO", "BARRIO PEQUEÑO", "BARRIO MEDIANO", "BARRIO GRANDE"],
-        'DENSIDAD_NOCTURNA': ["DENSIDAD NOCTURNA MUY BAJA", "DENSIDAD NOCTURNA BAJA", "DENSIDAD NOCTURNA MEDIA", "DENSIDAD NORCTURNA ALTA"],
-        'DENSIDAD_BANCARIA': ["DENSIDAD BANCARIA MUY BAJA", "DENSIDAD BANCARIA BAJA", "DENSIDAD BANCARIA MEDIA", "DENSIDAD BANCARIA ALTA"],
-        'DENSIDAD_TIENDAS': ["DENSIDAD COMERCIAL MUY BAJA", "DENSIDAD COMERCIAL BAJA", "DENSIDAD COMERCIAL MEDIA", "DENSIDAD COMERCIAL ALTA"],
-        'DENSIDAD_PARQUES': ["DENSIDAD PARQUES MUY BAJA", "DENSIDAD PARQUES BAJA", "DENSIDAD PARQUES MEDIA", "DENSIDAD PARQUES ALTA"],
-        'ILUMINACION': ["ILUMINACION MUY BAJA", "ILUMINACION BAJA", "ILUMINACION MEDIA", "ILUMINACION ALTA"],
-        'PERSONAS': ["CANTIDAD DE PERSONAS MUY BAJA", "CANTIDAD DE PERSONAS BAJA", "CANTIDAD DE PERSONAS MEDIA", "CANTIDAD DE PERSONAS ALTA"],
-        'SEGURIDAD': ["SEGURIDAD MUY BAJA", "SEGURIDAD BAJA", "SEGURIDAD MEDIA", "SEGURIDAD ALTA"],
-        'SENDERO': ["SENDERO MUY BAJO", "SENDERO BAJO", "SENDERO MEDIO", "SENDERO ALTO"],
-        'TRANSPORTE': ["TRANSPORTE MUY BAJO", "TRANSPORTE BAJO", "TRANSPORTE MEDIO", "TRANSPORTE ALTO"],
-    }
-    cluster_feature = 'MES'
-    fuzzification = Fuzzification(dataset, fuzzy_sets, cluster_feature)
-    fuzzification.fuzzify()
-    fuzzification.fuzzified_data.to_csv('train_dataset_fuzzified2.csv',
-                                        index=False, header=False)
-    fuzzification.membership_data.to_csv('memberships.csv', index=False)
-
-
-main()
