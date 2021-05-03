@@ -13,8 +13,8 @@ setup(
     description="Fuzzy Association Rules Utility",
     author="Juan Camilo Montaña Granados",
     author_email="juanc_montana@javeriana.edu.co",
-    url="",
+    url="git@github.com:JuanCa11/fuzzy-association-rules.git",
     packages=find_packages(),
-    license='MIT',
+    license='GPLv3+',
     install_requires=INSTALL_REQUIRES,
 )

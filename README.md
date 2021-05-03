@@ -14,11 +14,33 @@ $ pip install git+https://github.com/JuanCa11/fuzzy-association-rules.git
 
 ## Usage
 
-If you need the `"bar"` string, just import it from this module.
+If you need to fuzzify your dataset, you just have to import it from this module.
 
 ```python
 from fuzzy_assocation_rules.fuzzy_utils.fuzzification import Fuzzification
 
 fuzzification = Fuzzification(dataset, fuzzy_sets, cluster_feature)
 fuzzification.fuzzify()
+fuzzified_data = fuzzification.fuzzified_data
+```
+
+If you need to create class association rules with fp-growth, you just have to import it from this module.
+
+```python
+from fuzzy_assocation_rules.fuzzy_ar.fuzzy_utils.cars_fp_growth import CARs
+
+cars = CARs(fuzzy_sets, transactions, positive, negative)
+cars.generate_frequent_itemsets()
+rules = cars.get_car_rules()
+
+```
+
+If you need to create a recommender based on class association rules, you just have to import it from this module.
+
+```python
+from fuzzy_assocation_rules.fuzzy_ar.fuzzy_utils.recommender import Recommender
+
+recommender = Recommender(rules, fuzzy_sets)
+trigger_rules = recommender.trigger_rules(test_data, memberships_test_data)
+new_rules = recommender.get_new_rules()
 ```
