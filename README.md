@@ -29,7 +29,7 @@ If you need to create class association rules with fp-growth, you just have to i
 ```python
 from fuzzy_assocation_rules.fuzzy_utils.cars_fp_growth import CARs
 
-cars = CARs(fuzzy_sets, transactions, positive, negative)
+cars = CARs(wildcards, transactions, positive, negative)
 cars.generate_frequent_itemsets()
 rules = cars.get_car_rules()
 

@@ -5,14 +5,14 @@ import pandas as pd
 
 
 class CARs():
-    def __init__(self, fuzzy_sets, transactions, positive, negative,
+    def __init__(self, wildcards, transactions, positive, negative,
                  p_support=0.25, p_confidence=0.25, p_antecedents=0.25,
                  p_wildcards=0.25):
         self.p_support = p_support
         self.p_confidence = p_confidence
         self.p_antecedents = p_antecedents
         self.p_wildcards = p_wildcards
-        self.fuzzy_sets = fuzzy_sets
+        self.wildcards = wildcards
         self.transactions = transactions
         self.positive = {positive}
         self.negative = {negative}
@@ -61,17 +61,17 @@ class CARs():
     def get_n_wildcards(self, x):
         n_wilcards = 0
         for item in x:
-            if item in self.fuzzy_sets_transpose:
+            if item in self.wildcards_transpose:
                 n_wilcards += 1
         return n_wilcards
 
     @property
-    def fuzzy_sets_transpose(self):
-        fuzzy_sets_dict = {}
-        for key, value in self.fuzzy_sets.items():
+    def wildcards_transpose(self):
+        wildcards_dict = {}
+        for key, value in self.wildcards.items():
             for val in value:
-                fuzzy_sets_dict[val] = key
-        return fuzzy_sets_dict
+                wildcards_dict[val] = key
+        return wildcards_dict
 
     def get_rule_weigth(self, x):
         return x['support']*self.p_confidence + \
