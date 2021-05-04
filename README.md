@@ -17,7 +17,7 @@ $ pip install git+https://github.com/JuanCa11/fuzzy-association-rules.git
 If you need to fuzzify your dataset, you just have to import it from this module.
 
 ```python
-from fuzzy_assocation_rules.fuzzy_utils.fuzzification import Fuzzification
+from fuzzy_ar.fuzzification import Fuzzification
 
 fuzzification = Fuzzification(dataset, fuzzy_sets, cluster_feature)
 fuzzification.fuzzify()
@@ -27,7 +27,7 @@ fuzzified_data = fuzzification.fuzzified_data
 If you need to create class association rules with fp-growth, you just have to import it from this module.
 
 ```python
-from fuzzy_assocation_rules.fuzzy_utils.cars_fp_growth import CARs
+from fuzzy_ar.cars_fp_growth import CARs
 
 cars = CARs(wildcards, transactions, positive, negative)
 cars.generate_frequent_itemsets()
@@ -38,7 +38,7 @@ rules = cars.get_car_rules()
 If you need to create a recommender based on class association rules, you just have to import it from this module.
 
 ```python
-from fuzzy_assocation_rules.fuzzy_utils.recommender import Recommender
+from fuzzy_ar.recommender import Recommender
 
 recommender = Recommender(rules, fuzzy_sets)
 trigger_rules = recommender.trigger_rules(test_data, memberships_test_data)
