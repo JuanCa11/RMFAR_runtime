@@ -1,4 +1,4 @@
-# Recommender Model with Fuzzy Association Rules
+# Recommender Model with Fuzzy Association Rules (RMFAR)
 
 ## What's here
 
