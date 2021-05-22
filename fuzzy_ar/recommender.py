@@ -21,10 +21,12 @@ class Recommender():
             self._rules['mu_rule']*0.5
 
         features = ['antecedents', 'consequents', 'confidence',
-                            'weigth', 'memberships', 'mu_rule', 'score']
+                    'weigth', 'memberships', 'mu_rule', 'score']
 
-        return self._rules.loc[self._rules['mu_rule'] > 0,features].sort_values(
+        rules = self._rules.loc[self._rules['mu_rule'] > 0,features].sort_values(
                 by=['score'], ascending=False)
+        rules = rules.iloc[0:500]
+        return rules.reset_index(drop=True)
 
     def get_memberships(self, consequent, data):
         memberships_rule = []
@@ -100,9 +102,10 @@ class Recommender():
                         wildcards_flag.add(rule[2])
                         rules_wildcards = pd.concat([rules_wildcards, pd.DataFrame(
                             values, columns=columns)], ignore_index=True)
-        if len(rules_wildcards):
+        if len(rules_wildcards) > 0:
             rules_wildcards['diff'] = rules_wildcards['score']-rules_wildcards['new_score']
-            rules_wildcards.sort_values(by=['diff'], ascending=False)
+            rules_wildcards = rules_wildcards.sort_values(by=['diff'], ascending=False)
+            rules_wildcards = rules_wildcards.reset_index(drop=True)
             return rules_wildcards.drop_duplicates(subset=['wildcard'])
         else:
             return rules_wildcards
@@ -125,7 +128,7 @@ class Recommender():
         return no_fuzzy_sets_dict
 
     def predict(self, data):
-        trigger_rules = self.trigger_rules(data).reset_index(drop=True)
+        trigger_rules = self.trigger_rules(data)
         if not trigger_rules.empty:
             return list(trigger_rules.loc[0, 'consequents'])[0]
         else:
