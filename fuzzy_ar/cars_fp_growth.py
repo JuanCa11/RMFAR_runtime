@@ -14,7 +14,7 @@ class CARs():
         self.p_wildcards = p_wildcards
         self.wildcards = wildcards
         self.transactions = transactions
-        self.clasess = classes
+        self.classes = classes
 
     def generate_frequent_itemsets(self, min_support=0.014):
         te = TransactionEncoder()
