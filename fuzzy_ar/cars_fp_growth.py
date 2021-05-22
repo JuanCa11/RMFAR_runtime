@@ -5,7 +5,7 @@ import pandas as pd
 
 
 class CARs():
-    def __init__(self, wildcards, transactions, positive, negative,
+    def __init__(self, wildcards, transactions, classes: list,
                  p_support=0.25, p_confidence=0.25, p_antecedents=0.25,
                  p_wildcards=0.25):
         self.p_support = p_support
@@ -14,8 +14,7 @@ class CARs():
         self.p_wildcards = p_wildcards
         self.wildcards = wildcards
         self.transactions = transactions
-        self.positive = {positive}
-        self.negative = {negative}
+        self.clasess = classes
 
     def generate_frequent_itemsets(self, min_support=0.014):
         te = TransactionEncoder()
@@ -25,11 +24,17 @@ class CARs():
         self.frequent_itemsets = fpgrowth(df, min_support=min_support,
                                           use_colnames=True)
 
+    def filter_fn(self, row):
+        for clas in self.classes:
+            if row['consequents'] == {clas}:
+                return True
+        return False
+
     def get_car_rules(self, metric='confidence', min_threshold=0.6):
         rules = association_rules(self.frequent_itemsets, metric=metric,
                                   min_threshold=min_threshold)
-        rules = rules[(rules['consequents'] == self.positive) |
-                      (rules['consequents'] == self.negative)]
+
+        rules = rules[rules.apply(self.filter_fn, axis=1)]
 
         rules['antecedents_len'] = rules['antecedents'].apply(lambda x: len(x))
         rules['n_wildcards'] = rules['antecedents'].apply(

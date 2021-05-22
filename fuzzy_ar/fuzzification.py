@@ -148,6 +148,8 @@ class Fuzzification():
                                 lambda x: f"MONTH_{str(x)}")
         for index, feature in enumerate(self._features):
             fuzzified_df.insert(0, feature, self._fuzzified_data[index])
+            fuzzified_df.insert(0, f"MEM_{feature}",
+                                self._membership_data[index])
         return fuzzified_df
 
     @property
