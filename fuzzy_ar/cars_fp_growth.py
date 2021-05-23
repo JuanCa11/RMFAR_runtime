@@ -30,7 +30,7 @@ class CARs():
                 return True
         return False
 
-    def get_car_rules(self, metric='confidence', min_threshold=0.6):
+    def get_car_rules(self, metric='confidence', min_threshold=0.55):
         rules = association_rules(self.frequent_itemsets, metric=metric,
                                   min_threshold=min_threshold)
 

@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 # Library dependencies
 INSTALL_REQUIRES = [
     "pandas==0.24.2",
-    "scikit-learn==0.20.3",
+    "scikit-learn==0.24.2",
     "mlxtend==0.18.0",
     "numpy==1.16.2"
 ]

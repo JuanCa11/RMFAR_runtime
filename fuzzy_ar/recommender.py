@@ -26,7 +26,9 @@ class Recommender():
         rules = self._rules.loc[self._rules['mu_rule'] > 0,features].sort_values(
                 by=['score'], ascending=False)
         rules = rules.iloc[0:500]
-        return rules.reset_index(drop=True)
+        rules = rules.reset_index(drop=True)
+        self._trigger_rules = rules
+        return self._trigger_rules
 
     def get_memberships(self, consequent, data):
         memberships_rule = []
@@ -106,10 +108,11 @@ class Recommender():
             rules_wildcards['diff'] = rules_wildcards['score']-rules_wildcards['new_score']
             rules_wildcards = rules_wildcards.sort_values(by=['diff'], ascending=False)
             rules_wildcards = rules_wildcards.reset_index(drop=True)
-            return rules_wildcards.drop_duplicates(subset=['wildcard'])
+            rules_wildcards = rules_wildcards.drop_duplicates(subset=['wildcard'])
+            self._new_rules = rules_wildcards
         else:
-            return rules_wildcards
-
+            self._new_rules = rules_wildcards
+        return self._new_rules
 
     @property
     def fuzzy_sets_transpose(self):
