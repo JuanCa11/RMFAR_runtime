@@ -44,4 +44,7 @@ from fuzzy_ar.recommender import Recommender
 
 recommender = Recommender(rules_case1, fuzzy_sets, no_fuzzy_sets, default_class)
 y_pred = recommender.predict_all(X_test)
+
+recommender.predict_all(X_test)
+trigger_rules = recommender._trigger_rules
 ```
