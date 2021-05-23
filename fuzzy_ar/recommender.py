@@ -1,4 +1,5 @@
 import pandas as pd
+import ast
 
 
 class Recommender():
@@ -6,6 +7,7 @@ class Recommender():
                  default_class: str):
         self._rules = rules
         self._fuzzy_sets = fuzzy_sets
+        self._predicted_class = None
         self._no_fuzzy_sets = no_fuzzy_sets
         self._default_class = default_class
 
@@ -66,28 +68,30 @@ class Recommender():
         new_rules = []
         for _, rule in trigger_rules.iterrows():
             for index, item in enumerate(rule['antecedents']):
-                if item in self.fuzzy_sets_transpose:
-                    new_rule = self.new_rules(
-                        (rule['antecedents']),
-                        self._fuzzy_sets[
-                            self.fuzzy_sets_transpose[item]
-                            ].index(item),
-                        self._fuzzy_sets[self.fuzzy_sets_transpose[item]])
-                else:
-                    new_rule = self.new_rules(
-                        (rule['antecedents']),
-                        self._no_fuzzy_sets[
-                            self.no_fuzzy_sets_transpose[item]
-                            ].index(item),
-                        self._no_fuzzy_sets[self.no_fuzzy_sets_transpose[item]])
+                if item not in ['FEMENINO', 'MASCULINO']:
+                    new_rule = None
+                    if item in self.fuzzy_sets_transpose:
+                        new_rule = self.new_rules(
+                            (rule['antecedents']),
+                            self._fuzzy_sets[
+                                self.fuzzy_sets_transpose[item]
+                                ].index(item),
+                            self._fuzzy_sets[self.fuzzy_sets_transpose[item]])
+                    else:
+                        new_rule = self.new_rules(
+                            (rule['antecedents']),
+                            self._no_fuzzy_sets[
+                                self.no_fuzzy_sets_transpose[item]
+                                ].index(item),
+                            self._no_fuzzy_sets[self.no_fuzzy_sets_transpose[item]])
 
-                rule_without_item = rule['antecedents'].copy()
-                rule_without_item.remove(item)
-                new_rule.append(rule_without_item)
-                new_rules.append((rule, new_rule, item))
+                    rule_without_item = rule['antecedents'].copy()
+                    rule_without_item = rule_without_item.remove(item)
+                    new_rule.append(rule_without_item)
+                    new_rules.append((rule, new_rule, item))
 
         rules_wildcards = pd.DataFrame()
-        wildcards_flag = set()
+        wildcards_flag = []
         for rule in new_rules:
             if rule[2] not in wildcards_flag:
                 for x in rule[1]:
@@ -101,14 +105,15 @@ class Recommender():
                                 rule[2]]]
                         columns = ['rule', 'class', 'score',
                                 'new_rule', 'new_class', 'new_score', 'wildcard']
-                        wildcards_flag.add(rule[2])
+                        wildcards_flag.append(rule[2])
                         rules_wildcards = pd.concat([rules_wildcards, pd.DataFrame(
                             values, columns=columns)], ignore_index=True)
         if len(rules_wildcards) > 0:
             rules_wildcards['diff'] = rules_wildcards['score']-rules_wildcards['new_score']
+            rules_wildcards = rules_wildcards[rules_wildcards['diff'] > 0]
             rules_wildcards = rules_wildcards.sort_values(by=['diff'], ascending=False)
-            rules_wildcards = rules_wildcards.reset_index(drop=True)
             rules_wildcards = rules_wildcards.drop_duplicates(subset=['wildcard'])
+            rules_wildcards = rules_wildcards.reset_index(drop=True)
             self._new_rules = rules_wildcards
         else:
             self._new_rules = rules_wildcards
@@ -133,7 +138,16 @@ class Recommender():
     def predict(self, data):
         trigger_rules = self.trigger_rules(data)
         if not trigger_rules.empty:
-            return list(trigger_rules.loc[0, 'consequents'])[0]
+            self._predicted_class = list(trigger_rules.loc[0, 'consequents'])[0]
+            return self._predicted_class
+        else:
+            return self._default_class
+
+    def predict_proba(self, data):
+        trigger_rules = self.trigger_rules(data)
+        if not trigger_rules.empty:
+            self._predicted_class = list(trigger_rules.loc[0, 'consequents'])[0]
+            return (self._predicted_class, trigger_rules.loc[0, 'score'])
         else:
             return self._default_class
 

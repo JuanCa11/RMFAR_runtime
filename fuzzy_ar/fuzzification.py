@@ -125,7 +125,6 @@ class Fuzzification():
             smc = [x, y]
             kmc.append(smc)
         # print(kmc)
-
         mem_means = []
 
         kmeans = KMeans(n_clusters=4, init='k-means++', random_state=0)
