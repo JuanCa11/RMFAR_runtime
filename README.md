@@ -47,4 +47,5 @@ y_pred = recommender.predict_all(X_test)
 
 recommender.predict_all(X_test)
 trigger_rules = recommender._trigger_rules
+new_rules = recommender.get_new_rules(trigger_rules)
 ```
