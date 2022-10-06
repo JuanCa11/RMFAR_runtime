@@ -9,7 +9,7 @@ This repository contains utilities to work with Fuzzy Assocation Rules using FP-
 To install it:
 
 ```bash
-$ pip install git+https://github.com/JuanCa11/RMFAR_runtime.git
+pip install git+https://github.com/JuanCa11/RMFAR_runtime.git
 ```
 
 ## Usage
